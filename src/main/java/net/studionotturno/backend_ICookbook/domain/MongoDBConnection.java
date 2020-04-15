@@ -32,12 +32,16 @@ public class MongoDBConnection {
 		this.pass="";
 		this.mongoClient = new MongoClient("localhost", 27017);
 		this.database = mongoClient.getDatabase("mydb");
-		this.collection=this.database.getCollection("recipes");
 	}
 	
 	public static MongoDBConnection getInstance(){
 		if(instance==null) instance=new MongoDBConnection();
 		return instance;
+	}
+
+	public MongoDBConnection setCollection(String collection){
+		this.collection=this.database.getCollection(collection);
+		return this;
 	}
 
 	/**
@@ -78,9 +82,6 @@ public class MongoDBConnection {
 	 */
 	public FindIterable<Document> getDocumentQuery(Bson query) {
 		FindIterable<Document> c=this.collection.find(query);
-		//List<Document> list=new ArrayList<Document>();
-		//while(c.iterator().hasNext()) list.add(c.iterator().next());
-
 		return c;
 	}
 	
@@ -93,7 +94,7 @@ public class MongoDBConnection {
 	public boolean insertData(Document document) {
 		try {
 			String s=new ObjectId().toString();
-			document.put("_id",s);
+ 			document.put("_id",s);
 			collection.insertOne(document);
 			return true;
 		}catch(Exception e){

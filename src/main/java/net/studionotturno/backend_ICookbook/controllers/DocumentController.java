@@ -26,8 +26,10 @@ public class DocumentController {
 	 */
 	@GetMapping(value="docu/get_documents/{email}")
 	public List<Document> getDocuments(@PathVariable String email) {
-		FindIterable<Document>  f= MongoDBConnection.getInstance().getDocumentQuery(eq("userName",email));
+		if(email==null | email=="" | !email.contains("@")) return null;
+		FindIterable<Document>  f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(eq("userName",email));
 		List<Document> list = f.into(new ArrayList<>());
+		System.out.println(list.toString());
 		return list;
 	}
 
@@ -38,19 +40,22 @@ public class DocumentController {
 	 */
 	@GetMapping(value="docu/get_documents/{email}/{recipeName}")
 	public Map<String,?> getSingleDocument(@PathVariable String email, @PathVariable String recipeName) {
-		FindIterable<Document>  f= MongoDBConnection.getInstance().getDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
+		if(email==null | email=="" | !email.contains("@") | recipeName==null | recipeName=="") return null;
+		FindIterable<Document>  f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
 		return f.first();
 	}
 
 	@GetMapping(value="docu/get_documents/recipes/{email}/{recipeName}")
 	public String getDocumentID(@PathVariable String email,@PathVariable String recipeName){
-		FindIterable<Document>  f= MongoDBConnection.getInstance().getDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
+		if(email==null | email=="" | !email.contains("@") | recipeName==null | recipeName=="") return null;
+		FindIterable<Document>  f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
 		return f.first().get("_id").toString();
 	}
 
 	@DeleteMapping(value="docu/delete_documents/{email}/{recipeName}")
 	public boolean deleteSingleDocument(@PathVariable String email, @PathVariable String recipeName) {
-		return MongoDBConnection.getInstance().deleteDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
+		if(email==null | email=="" | !email.contains("@") | recipeName==null | recipeName=="") return false;
+		return MongoDBConnection.getInstance().setCollection("recipes").deleteDocumentQuery(and(eq("userName",email),eq("recipeName",recipeName)));
 	}
 
 	/**
@@ -58,16 +63,18 @@ public class DocumentController {
 	 */
 	@PostMapping(value ="docu/post_documents/")
 	public boolean postDocument(@RequestBody String document) {
+		if(document==null) return false;
 		Document d=Document.parse(document);
+		if(d.isEmpty()) return false;
 		Bson bson=and(eq("userName",d.get("userName")),eq("recipeName",d.get("recipeName")));
-		FindIterable<Document> f= MongoDBConnection.getInstance().getDocumentQuery(bson);
+		FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(bson);
 		try{
 			//se non da errore vuol dire che una ricetta con lo stesso nome è già presente,e va quindi modificata in tronco
 			f.first().toString();
-			MongoDBConnection.getInstance().deleteDocumentQuery(bson);
-			return MongoDBConnection.getInstance().insertData(d);
+			MongoDBConnection.getInstance().setCollection("recipes").deleteDocumentQuery(bson);
+			return MongoDBConnection.getInstance().setCollection("recipes").insertData(d);
 		}catch(Exception e){//se scatta l'eccezione,quindi la query non ha dato risultati, viene inserito il nuovo documento
-			return MongoDBConnection.getInstance().insertData(d);
+			return MongoDBConnection.getInstance().setCollection("recipes").insertData(d);
 		}
 	}
 

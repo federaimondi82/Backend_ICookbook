@@ -25,7 +25,7 @@ public interface MyIterator {
 	default Set<LazyResource> getResult(Set<LazyResource> set, Bson bson){
 		Set<Document> list=new HashSet<>();
 		//query sul database di tutte le ricette con le parola indicata
-		FindIterable<Document> f= MongoDBConnection.getInstance().getDocumentQuery(bson);
+		FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(bson);
 		list = f.into(new HashSet<>());
 		//list.forEach((el)-> System.out.println(el.toString()));
 		if(!set.isEmpty()){//filtraggio dei risultati

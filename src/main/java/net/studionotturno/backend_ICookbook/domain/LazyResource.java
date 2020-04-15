@@ -16,7 +16,6 @@ public class LazyResource {
     }
 
     public Document toJson(){
-
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("documentID",this.documentID);
         map.put("recipeName",this.recipeName);
