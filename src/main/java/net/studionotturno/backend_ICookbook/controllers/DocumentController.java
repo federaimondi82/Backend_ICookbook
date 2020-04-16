@@ -2,7 +2,7 @@ package net.studionotturno.backend_ICookbook.controllers;
 
 import java.util.*;
 
-import net.studionotturno.backend_ICookbook.domain.MongoDBConnection;
+import net.studionotturno.backend_ICookbook.DbConnection.MongoDBConnection;
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
@@ -29,7 +29,7 @@ public class DocumentController {
 		if(email==null | email=="" | !email.contains("@")) return null;
 		FindIterable<Document>  f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(eq("userName",email));
 		List<Document> list = f.into(new ArrayList<>());
-		System.out.println(list.toString());
+		//System.out.println(list.toString());
 		return list;
 	}
 

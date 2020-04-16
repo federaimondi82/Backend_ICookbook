@@ -1,6 +1,10 @@
-package net.studionotturno.backend_ICookbook.domain;
+package net.studionotturno.backend_ICookbook.DbConnection;
 
+import org.bson.BsonDocument;
 import org.bson.Document;
+import org.bson.codecs.BsonValueCodecProvider;
+import org.bson.codecs.ValueCodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -8,9 +12,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -76,15 +77,50 @@ public class MongoDBConnection {
 		//TODO
 	}
 	
-	/**Permette di reperire i dati dal database tramite una query di "select"
+	/**Permette di reperire i dati dal database tramite una query di "select".
+	 * Le query in input sono consentite solo se passano il controllo del metodo checkQuery
 	 * @param query: una query di select
 	 * @return ritorna il resultSet della query;
 	 */
 	public FindIterable<Document> getDocumentQuery(Bson query) {
-		FindIterable<Document> c=this.collection.find(query);
+		FindIterable<Document> c = null;
+		if(checkBson(query)){
+			c=this.collection.find(query);
+		}
 		return c;
 	}
-	
+
+	/**
+	 * Non sono consentite tutte quelle query che hanno un profilo paricolarmente pericoloso e che
+	 * lo sviluppatore non ha implementato.
+	 *
+	 * */
+	private boolean checkBson(Object query) {
+		Document d=null;
+		if(query instanceof Bson){
+			Bson query2=(Bson)query;
+			BsonDocument doc=query2.toBsonDocument(
+					BsonDocument.class, MongoClient.getDefaultCodecRegistry()
+			);
+			String json=doc.toJson();
+			d=Document.parse(json);
+		}
+		if(query instanceof Document){
+			d=(Document)query;
+		}
+		if(d.toString().contains("$ne=") || d.toString().contains("null") ||
+				d.toString().contains("$nin") || d.toString().contains("$in") ||
+				d.toString().contains("$nor") || d.toString().contains("$lte") || d.toString().contains("$lt") ||
+				(d.toString().contains("$gt=") && d.toString().contains("password")) ||
+				(d.toString().contains("$gte=") && d.toString().contains("password")) ||
+				(d.toString().contains("$gt=") && d.toString().contains("userName")) ||
+				(d.toString().contains("$gte=") && d.toString().contains("userName"))
+		){
+			return false;
+		}
+		else return true;
+	}
+
 
 	/**
 	 * Permette di eseguire query di inserimento e update sui dati
@@ -92,15 +128,18 @@ public class MongoDBConnection {
 	 * @return ritorna true se la query e' andata a buon fine
 	 */
 	public boolean insertData(Document document) {
-		try {
-			String s=new ObjectId().toString();
- 			document.put("_id",s);
-			collection.insertOne(document);
-			return true;
-		}catch(Exception e){
-			return false;
+		if(document==null) return false;
+		if(checkBson(document)){
+			try {
+				String s=new ObjectId().toString();
+				document.put("_id",s);
+				collection.insertOne(document);
+				return true;
+			}catch(Exception e){
+				return false;
+			}
 		}
-		
+		return false;
 	}
 
 

@@ -1,8 +1,7 @@
 package net.studionotturno.backend_ICookbook.controllers;
 
 import com.mongodb.client.FindIterable;
-import net.studionotturno.backend_ICookbook.domain.LazyResource;
-import net.studionotturno.backend_ICookbook.domain.MongoDBConnection;
+import net.studionotturno.backend_ICookbook.DbConnection.MongoDBConnection;
 import net.studionotturno.backend_ICookbook.domain.SaltGenerator;
 import net.studionotturno.backend_ICookbook.domain.User;
 import org.bson.Document;
@@ -29,7 +28,7 @@ public class UserController {
         User user=new User().toObject(map);
         if(user.getEmail()==null | !user.getEmail().contains("@") | user.getPassword()==null | user.getEmail()=="" | user.getPassword()=="") return null;
         else{
-            System.out.println("user1: "+user.toString());
+            //System.out.println("user1: "+user.toString());
             Bson bson=and(eq("email",user.getEmail()),eq("password",getPass(user.getEmail(),user.getPassword())));
             FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(bson);
             try{

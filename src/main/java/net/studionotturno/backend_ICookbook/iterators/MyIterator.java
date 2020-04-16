@@ -1,7 +1,7 @@
 package net.studionotturno.backend_ICookbook.iterators;
 
 import com.mongodb.client.FindIterable;
-import net.studionotturno.backend_ICookbook.domain.MongoDBConnection;
+import net.studionotturno.backend_ICookbook.DbConnection.MongoDBConnection;
 import net.studionotturno.backend_ICookbook.domain.LazyResource;
 import org.bson.Document;
 import org.bson.conversions.Bson;

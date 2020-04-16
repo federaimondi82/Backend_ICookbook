@@ -93,7 +93,7 @@ public class SearcherController {
             set1.clear();
             while(iterator.hasNext()) set1.add(iterator.next());
             //System.out.println("******by name********");
-            set1.forEach((el)-> System.out.println(el.toString()));
+            //set1.forEach((el)-> System.out.println(el.toString()));
 
         }
         //filtraggio per ingrediente sullo stesso set ottenuto prima
@@ -102,7 +102,7 @@ public class SearcherController {
             set1.clear();
             while(iterator.hasNext()) set1.add(iterator.next());
             //System.out.println("******by ingredient********");
-            set1.forEach((el)-> System.out.println(el.toString()));
+            //set1.forEach((el)-> System.out.println(el.toString()));
 
         }
 
@@ -112,7 +112,7 @@ public class SearcherController {
             set1.clear();
             while(iterator.hasNext()) set1.add(iterator.next());
             //System.out.println("******by time********");
-            set1.forEach((el)-> System.out.println(el.toString()));
+            //set1.forEach((el)-> System.out.println(el.toString()));
         }
 
         return set1.stream().map((el->el.toJson())).collect(Collectors.toSet());
@@ -130,6 +130,7 @@ public class SearcherController {
             //ogni lazyResource viene trasformata in Document per l'invio al client
             set.add(iterator.next().toJson());
         }
+        set.forEach((ele)-> System.out.println(ele.toString()));
         return set;
     }
 
