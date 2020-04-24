@@ -105,19 +105,17 @@ public class MongoDBConnection {
 			String json=doc.toJson();
 			d=Document.parse(json);
 		}
-		if(query instanceof Document){
-			d=(Document)query;
-		}
 		if(d.toString().contains("$ne=") || d.toString().contains("null") ||
 				d.toString().contains("$nin") || d.toString().contains("$in") ||
-				d.toString().contains("$nor") || d.toString().contains("$lte") || d.toString().contains("$lt") ||
+				d.toString().contains("$nor") ||
 				(d.toString().contains("$gt=") && d.toString().contains("password")) ||
 				(d.toString().contains("$gte=") && d.toString().contains("password")) ||
 				(d.toString().contains("$gt=") && d.toString().contains("userName")) ||
-				(d.toString().contains("$gte=") && d.toString().contains("userName"))
-		){
-			return false;
-		}
+				(d.toString().contains("$gte=") && d.toString().contains("userName")) ||
+				(d.toString().contains("$gte=") && d.toString().contains("name")) ||
+				(d.toString().contains("$gt=") && d.toString().contains("name"))
+
+		)return false;
 		else return true;
 	}
 

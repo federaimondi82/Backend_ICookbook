@@ -1,11 +1,13 @@
 package net.studionotturno.backend_ICookbook.iterators;
 
 import net.studionotturno.backend_ICookbook.domain.LazyResource;
-
 import java.util.Set;
-
 import static com.mongodb.client.model.Filters.*;
 
+/**
+ * Un ConcreteIterator del patter Itertor GOF; implementa i metodi dell'Iterator
+ * e fornisce il set con gli elementi che hanno un ineiemente di ingredient passti come parametro
+ */
 public class ConcreteIteratorByIngredient implements MyIterator {
 
 	Set<LazyResource> set;

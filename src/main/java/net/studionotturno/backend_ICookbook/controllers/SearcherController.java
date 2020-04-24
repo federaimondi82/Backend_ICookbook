@@ -1,5 +1,6 @@
 package net.studionotturno.backend_ICookbook.controllers;
 
+import net.studionotturno.backend_ICookbook.domain.JsonChecker;
 import net.studionotturno.backend_ICookbook.domain.LazyResource;
 import net.studionotturno.backend_ICookbook.iterators.ConcreteCollection;
 import net.studionotturno.backend_ICookbook.iterators.MyIterator;
@@ -28,6 +29,7 @@ public class SearcherController {
      */
     @PostMapping(value="docu/iterator/byName/{name}")
     public Set<Document> searchByName(@RequestBody String json, @PathVariable String name){
+        if(!JsonChecker.getInstance().checkJson(Document.parse(json))) return null;
         Set<LazyResource> lazyList=decodeBody(json);
         //istanziazione dell'iterator
         MyIterator iterator=  new ConcreteCollection().createConcreteIteratorByName(lazyList,name);
@@ -42,6 +44,7 @@ public class SearcherController {
      */
     @PostMapping(value="docu/iterator/byIngredient/{name}")
     public Set<Document> searchByIngredient(@RequestBody String json, @PathVariable String name){
+        if(!JsonChecker.getInstance().checkJson(Document.parse(json))) return null;
         Set<LazyResource> lazyList= decodeBody(json);
         //istanziazione dell'iterator
         MyIterator iterator=  new ConcreteCollection().createConcreteIteratorByIngredient(lazyList,name);
@@ -57,6 +60,7 @@ public class SearcherController {
      */
     @PostMapping(value="docu/iterator/byExecutionTime/{time}")
     public Set<Document> searchByExecutionTime(@RequestBody String json, @PathVariable String time){
+        if(!JsonChecker.getInstance().checkJson(Document.parse(json))) return null;
         Set<LazyResource> lazyList=decodeBody(json);
         //istanziazione dell'iterator
         MyIterator iterator=  new ConcreteCollection().createConcreteIteratorByExecutionTime(lazyList,Integer.parseInt(time));
@@ -71,6 +75,7 @@ public class SearcherController {
      */
     @PostMapping(value="docu/iterator/byDifficult/{difficult}")
     public Set<Document> searchByDifficult(@RequestBody String json, @PathVariable String difficult){
+        if(!JsonChecker.getInstance().checkJson(Document.parse(json))) return null;
         Set<LazyResource> lazyList=decodeBody(json);
         //istanziazione dell'iterator
         MyIterator iterator=  new ConcreteCollection().createConcreteIteratorByExecutionTime(lazyList,Integer.parseInt(difficult));
@@ -83,6 +88,7 @@ public class SearcherController {
      * */
     @PostMapping(value="docu/iterator/byTotalTags/{totalElements}")
     public Set<Document> searchByTotalTags(@RequestBody String json, @PathVariable String totalElements){
+        if(!JsonChecker.getInstance().checkJson(Document.parse(json))) return null;
         Set<LazyResource> lazyList=decodeBody(json);//decodifica del json con le lazyres del clinet già presenti nella pagina della ricerca
         Document doc=Document.parse(totalElements);//decodifica del body del messaggio(contiene ttti i tag da usare)
         MyIterator iterator;
@@ -90,31 +96,18 @@ public class SearcherController {
         //filtraggio per nome
         for (String value:((List<String>) doc.get("name"))) {
             iterator=  new ConcreteCollection().createConcreteIteratorByName(set1,value);
-            set1.clear();
-            while(iterator.hasNext()) set1.add(iterator.next());
-            //System.out.println("******by name********");
-            //set1.forEach((el)-> System.out.println(el.toString()));
-
+            set1.clear();    while(iterator.hasNext()) set1.add(iterator.next());
         }
         //filtraggio per ingrediente sullo stesso set ottenuto prima
         for (String value:((List<String>) doc.get("ing"))) {
             iterator=  new ConcreteCollection().createConcreteIteratorByIngredient(set1,value);
-            set1.clear();
-            while(iterator.hasNext()) set1.add(iterator.next());
-            //System.out.println("******by ingredient********");
-            //set1.forEach((el)-> System.out.println(el.toString()));
-
+            set1.clear();   while(iterator.hasNext()) set1.add(iterator.next());
         }
-
         //filtraggio per tempo di esecuzione sullo stesso set ottenuto prima
         for (String value:((List<String>) doc.get("time"))) {
             iterator=  new ConcreteCollection().createConcreteIteratorByExecutionTime(set1,Integer.parseInt(value));
-            set1.clear();
-            while(iterator.hasNext()) set1.add(iterator.next());
-            //System.out.println("******by time********");
-            //set1.forEach((el)-> System.out.println(el.toString()));
+            set1.clear();    while(iterator.hasNext()) set1.add(iterator.next());
         }
-
         return set1.stream().map((el->el.toJson())).collect(Collectors.toSet());
     }
 
@@ -130,7 +123,6 @@ public class SearcherController {
             //ogni lazyResource viene trasformata in Document per l'invio al client
             set.add(iterator.next().toJson());
         }
-        set.forEach((ele)-> System.out.println(ele.toString()));
         return set;
     }
 

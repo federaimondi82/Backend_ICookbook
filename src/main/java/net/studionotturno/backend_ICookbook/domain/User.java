@@ -5,16 +5,14 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Rappresentazione dei dati dell'utente per il backend
+ *
+ * */
 public class User {
 
 
-    String name;
-    String surname;
-    String gender;
-    String email;
-    String password;
-    String salt;
-    String birthday;
+    String name, surname,gender, email,password,salt,birthday;
 
     public User setName(String name){ this.name=name;return this; }
     public User setSurname(String surname){ this.surname=surname;return this; }
@@ -45,6 +43,9 @@ public class User {
         return this.birthday;
     }
 
+    /**
+     * Serializzaizone di dati in formato json da object User
+     * */
     public Document toJson(){
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("name",this.name);
@@ -57,6 +58,9 @@ public class User {
         return new Document(map);
     }
 
+    /**
+     * Deserializzaizone dei dati da Json a oggetto User
+     * */
     public User toObject(Map<String, ?> data) {
         try{this.name=data.get("name").toString();}catch(Exception e){}
         try{this.surname=data.get("surname").toString();}catch(Exception e){}

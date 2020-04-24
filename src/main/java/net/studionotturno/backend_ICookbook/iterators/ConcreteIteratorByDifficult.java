@@ -1,11 +1,14 @@
 package net.studionotturno.backend_ICookbook.iterators;
 
 import net.studionotturno.backend_ICookbook.domain.LazyResource;
-
 import java.util.Set;
-
 import static com.mongodb.client.model.Filters.lte;
 
+
+/**
+ * Un ConcreteIterator del patter Itertor GOF; implementa i metodi dell'Iterator
+ * e fornisce il set con gli elementi di una determineta difficoltà passata come paramento
+ */
 public class ConcreteIteratorByDifficult implements MyIterator {
 
 	Set<LazyResource> set;

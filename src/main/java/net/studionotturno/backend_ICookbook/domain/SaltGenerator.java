@@ -2,7 +2,12 @@ package net.studionotturno.backend_ICookbook.domain;
 
 import java.util.Random;
 
+/**
+ * Generatore di codici univoci random da asseganre come SALT alle password degli utenti
+ * in fase di registrazione
+ * */
 public class SaltGenerator {
+
     private String salt;
     private static SaltGenerator instance;
 

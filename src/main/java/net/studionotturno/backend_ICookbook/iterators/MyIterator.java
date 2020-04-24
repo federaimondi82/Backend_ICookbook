@@ -9,6 +9,10 @@ import org.bson.conversions.Bson;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * L'interfaccia iterator del desing patter Iterator GOF, mette a disposizone le operazioni per iterare un  Conrete collecton
+ *
+ * */
 public interface MyIterator {
 
 	public LazyResource next();
@@ -27,15 +31,14 @@ public interface MyIterator {
 		//query sul database di tutte le ricette con le parola indicata
 		FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(bson);
 		list = f.into(new HashSet<>());
-		//list.forEach((el)-> System.out.println(el.toString()));
-		if(!set.isEmpty()){//filtraggio dei risultati
-			list=resultFiltering(set,list);
-			//list.forEach((el)-> System.out.println(el.toString()));
-		}
-
+		//filtraggio dei risultati
+		if(!set.isEmpty())list=resultFiltering(set,list);
 		return adaptaResult(list);
 	}
 
+	/**
+	 * Metodo per adattare i risultati provenienti dal DBMS in Lazy Resource da passare al client
+	 * */
 	static Set<LazyResource> adaptaResult(Set<Document> list){
 		Set<LazyResource> newSet=new HashSet<>();
 		list.forEach((el)->{
@@ -45,10 +48,16 @@ public interface MyIterator {
 							.setExecutionTime(Double.parseDouble(el.get("executionTime").toString()))
 			);
 		});
-		//newSet.forEach((el)-> System.out.println(el.toString()));
 		return newSet;
 	}
 
+	/**
+	 * Elimina quelle risorse ridondanti.
+	 * Solitamente richiamato in seguito ad una ricerca totale delle risorse sul DBMS
+	 * @param set un eventuale set il set degli elementi proveniente dal client
+	 * @param list la lita di elementi trovati
+	 * @return una nuova lista con gli elementi non ridondanti
+	 */
 	static Set<Document> resultFiltering(Set<LazyResource> set, Set<Document> list){
 		Set<Document> filteredList=new HashSet<>();
 		for (Document doc:list) {

@@ -6,6 +6,10 @@ import java.util.Set;
 
 import static com.mongodb.client.model.Filters.*;
 
+/**
+ * Un ConcreteIterator del patter Itertor GOF; implementa i metodi dell'Iterator
+ * e fornisce il set con gli elementi che hanno un tepo di esecuzione peggiore di quello passato come parametro
+ */
 public class ConcreteIteratorByTime implements MyIterator {
 	Set<LazyResource> set;
 	int currentPosition=0;

@@ -42,17 +42,7 @@ public class NOSQL_Injection_Test {
         assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(ne("password","1")),null);
         assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(gt("password","")),null);
         assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(gte("name","")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(or(gt("",""))),null);
-        /*assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(query),null);*/
+        /**/
 
     }
 
