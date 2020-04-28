@@ -1,5 +1,6 @@
 package net.studionotturno.backend_ICookbook.DbConnection;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.codecs.BsonValueCodecProvider;
@@ -17,6 +18,9 @@ import com.mongodb.client.MongoDatabase;
 /**
  * Fornisce una interfaccia unificata per inviare e ricevere informazioni al/dal database
  *
+ * @see MongoDBConnection
+ * @see MongoDatabase
+ * @see MongoCollection
  */
 public class MongoDBConnection {
 	
@@ -35,7 +39,7 @@ public class MongoDBConnection {
 		this.database = mongoClient.getDatabase("mydb");
 	}
 	
-	public static MongoDBConnection getInstance(){
+	public static MongoDBConnection builder(){
 		if(instance==null) instance=new MongoDBConnection();
 		return instance;
 	}
@@ -148,15 +152,16 @@ public class MongoDBConnection {
 	 */
 	public boolean deleteDocumentQuery(Bson query) {
 		try {
-			collection.deleteOne(query);
-			return true;
+			DeleteResult deleteResult = collection.deleteOne(query);
+			return deleteResult.getDeletedCount() > 0;
 		}catch(Exception e){
 			return false;
 		}
 	}
 
 	public void updateData(String document) {
-
+		//collection.update
+		//todo
 	}
 
 }

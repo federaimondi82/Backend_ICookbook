@@ -30,11 +30,10 @@ public interface IPassChecker {
      */
     default boolean checkPass(String email,String pass){
         Bson bson=and(eq("email",email),eq("password",getPass(email,pass)));
-        FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(bson);
+        FindIterable<Document> f= MongoDBConnection.builder().setCollection("users").getDocumentQuery(bson);
         try{
             //se non da errore vuol dire che c'è una risposta
             f.first().toString();
-           // System.out.println(2);
             return true;
         }catch(Exception e){//se scatta l'eccezione,quindi la query non ha dato risultati, viene inserito il nuovo documento
             return false;
@@ -49,14 +48,11 @@ public interface IPassChecker {
     default String getPass(String email,String pass) {
         //cerca il salt relativo alla email e cifra la pass
         Bson bson=eq("email",email);
-        FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(bson);
+        FindIterable<Document> f= MongoDBConnection.builder().setCollection("users").getDocumentQuery(bson);
         String salt="";
         Set<Document> list = f.into(new HashSet<>());
-        for (Document doc:list) {
-            salt=doc.get("salt").toString();
-        }
+        for (Document doc:list) salt=doc.get("salt").toString();
         String p=pass+""+SECRET+""+salt;
-        //System.out.println(3);
         return cypherPass(p);
     }
 

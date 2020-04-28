@@ -16,7 +16,6 @@ public class StringChecker {
     }
 
     public boolean checkString(String input){
-       // System.out.println("input : "+input);
         if(input==null || input.contains(">") || input.contains("<") || input.contains("&") || input.contains("\"") ||
         input.contains("$") || input.contains("\\") || input.contains("/") || input.contains("'") ||
          input.contains("%") || input.contains("*") || input.contains("+") ||
@@ -24,7 +23,6 @@ public class StringChecker {
         input.contains("^") || input.contains("|") || input.contains("[") || input.contains("]") ||
         input.contains("{") || input.contains("}") || input.contains("(") || input.contains(")") ||
         input.contains("#") || input.contains("§") || input.contains("°") || input.contains("ç") ){
-            //System.out.println("stringa non valida : "+input);
             return false;
         }
         else return true;

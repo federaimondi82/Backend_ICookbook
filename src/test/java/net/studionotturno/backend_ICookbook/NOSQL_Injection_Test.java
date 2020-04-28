@@ -35,13 +35,13 @@ public class NOSQL_Injection_Test {
         List<Document> list = f.into(new ArrayList<>());
         list.forEach((el)-> System.out.println(el.toString()));*/
 
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(or(ne("password",null),gt("password",null))),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(nin("","")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(nin("")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(nin("","aaa","bbb","ccc")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(ne("password","1")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(gt("password","")),null);
-        assertEquals(MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(gte("name","")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(or(ne("password",null),gt("password",null))),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(nin("","")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(nin("")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(nin("","aaa","bbb","ccc")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(ne("password","1")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(gt("password","")),null);
+        assertEquals(MongoDBConnection.builder().setCollection("users").getDocumentQuery(gte("name","")),null);
         /**/
 
     }
@@ -49,7 +49,7 @@ public class NOSQL_Injection_Test {
     @Test
     public final void test_request_param(){
 
-        FindIterable<Document>  f= MongoDBConnection.getInstance().setCollection("users").getDocumentQuery(nin("pass","aaa","bbb","ccc"));
+        FindIterable<Document>  f= MongoDBConnection.builder().setCollection("users").getDocumentQuery(nin("pass","aaa","bbb","ccc"));
         List<Document> list = f.into(new ArrayList<>());
         list.forEach((el)-> System.out.println(el.toString()));
     }
@@ -61,7 +61,7 @@ public class NOSQL_Injection_Test {
         BsonDocument bdoc=query.toBsonDocument(BsonDocument.class, CodecRegistries.fromProviders(new BsonValueCodecProvider(), new ValueCodecProvider()));
         String json=bdoc.toJson();
         Document doc=Document.parse(json);
-        MongoDBConnection.getInstance().setCollection("users").insertData(doc);
+        MongoDBConnection.builder().setCollection("users").insertData(doc);
 
     }
 

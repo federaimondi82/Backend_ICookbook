@@ -10,15 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * L'interfaccia iterator del desing patter Iterator GOF, mette a disposizone le operazioni per iterare un  Conrete collecton
+ * L'interfaccia iterator del desing patter Iterator GOF, mette a disposizone le operazioni
+ * per iterare una Concrete collecton
  *
  * */
 public interface MyIterator {
 
 	public LazyResource next();
-
 	public boolean hasNext();
-
 	public void reset();
 
 	/**
@@ -29,17 +28,17 @@ public interface MyIterator {
 	default Set<LazyResource> getResult(Set<LazyResource> set, Bson bson){
 		Set<Document> list=new HashSet<>();
 		//query sul database di tutte le ricette con le parola indicata
-		FindIterable<Document> f= MongoDBConnection.getInstance().setCollection("recipes").getDocumentQuery(bson);
+		FindIterable<Document> f= MongoDBConnection.builder().setCollection("recipes").getDocumentQuery(bson);
 		list = f.into(new HashSet<>());
 		//filtraggio dei risultati
 		if(!set.isEmpty())list=resultFiltering(set,list);
-		return adaptaResult(list);
+		return adaptResult(list);
 	}
 
 	/**
 	 * Metodo per adattare i risultati provenienti dal DBMS in Lazy Resource da passare al client
 	 * */
-	static Set<LazyResource> adaptaResult(Set<Document> list){
+	static Set<LazyResource> adaptResult(Set<Document> list){
 		Set<LazyResource> newSet=new HashSet<>();
 		list.forEach((el)->{
 			newSet.add(

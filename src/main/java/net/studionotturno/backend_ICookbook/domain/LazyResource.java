@@ -13,6 +13,7 @@ public class LazyResource {
     String documentID,recipeName;
     double minutes;
 
+    public LazyResource(){}
 
     public LazyResource getResource() {
         return this;
@@ -26,7 +27,7 @@ public class LazyResource {
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("documentID",this.documentID);
         map.put("recipeName",this.recipeName);
-        map.put("executionTime",String.valueOf(this.minutes));
+        map.put("executionTime",this.minutes);
         return new Document(map);
     }
 
@@ -44,9 +45,7 @@ public class LazyResource {
     //#region setter
 
     public LazyResource setDocumentID(String documentID){this.documentID=documentID; return this;}
-
     public LazyResource setRecipeName(String recipeName){this.recipeName=recipeName; return this;}
-
     public LazyResource setExecutionTime(double executionTime){this.minutes=executionTime; return this;}
 
     //#endregion setter
@@ -54,9 +53,7 @@ public class LazyResource {
     //#region getter
 
     public String getDocumentID(){return this.documentID;}
-
     public String getRecipeName(){return this.recipeName;}
-
     public double getExecutionTime(){return this.minutes;}
 
 //#endregion getter
